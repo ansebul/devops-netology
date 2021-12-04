@@ -12,3 +12,5 @@
    + конфигурационные файлы .terraformrc и terraform.rc
 
 New line
+
+Добавляем строки через IDE
