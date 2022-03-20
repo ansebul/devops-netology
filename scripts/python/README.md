@@ -126,16 +126,14 @@ for service in services:
     print(f'{service} - {ips[2]}')
     current_state[service] = ips[2]
     if len(last_state) > 0:
-        old = set(last_state[service])
-        new = set(ips[2])
-        diff = new - old
-        if len(diff) > 0:
-            # Печатаем различия
-            print(f'[ERROR] <{service}> IP mismatch: <{old}> <{new}>')
+        diff = set(current_state[service]) - set(last_state[service])
+        if diff:
+            print(f'[ERROR] <{service}> IP mismatch: <{last_state[service]}> <{current_state[service]}>')
 
-# Записываем результаты текущей проверки в файл
+# Записываем результаты последней проверки в файл
 with open(state_file, 'w') as f:
     f.write(str(current_state))
+
 
 ````
 
