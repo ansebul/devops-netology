@@ -46,7 +46,7 @@ CREATE TABLE orders (id integer NOT NULL, title character varying(80) NOT NULL, 
 CREATE TABLE orders_1 PARTITION OF orders FOR VALUES FROM ('499') TO (MAXVALUE);
 CREATE TABLE orders_2 PARTITION OF orders FOR VALUES FROM ('0') TO ('499');
 INSERT INTO orders (id, title, price) SELECT * FROM orders_old;
-DROP DATABASE orders_old;
+DROP TABLE orders_old;
 COMMIT;
 ```
 
@@ -63,6 +63,7 @@ COMMIT;
 Как бы вы доработали бэкап-файл, чтобы добавить уникальность значения столбца `title` для таблиц `test_database`?
 
 ```diff
+
 --- ./test_database.sql 2022-05-24 17:07:24.825528286 +0300
 +++ ./test_database_modifed.sql 2022-05-24 17:08:38.699358040 +0300
 @@ -46,7 +46,7 @@
