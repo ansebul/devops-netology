@@ -51,7 +51,25 @@ COMMIT;
 ```
 
 Можно ли было изначально исключить "ручное" разбиение при проектировании таблицы orders?
-> Теоретически - можно, но практически - очень сложно. При проектировании ещё нет такого объёма данных и как их делить? 99%, что одну таблицу полную получим и остальные пустые.
+> ~~Теоретически - можно, но практически - очень сложно. При проектировании ещё нет такого объёма данных и как их делить? 99%, что одну таблицу полную получим и остальные пустые.~~
+
+#### Можно попробовать 2 варианта:
+> - `PARTITION BY RANGE` с заранее созданными вручную партициями и дефолтной партицией для значений, которые не попадают в созданные вручную.;
+````SQL
+CREATE TABLE orders (...) PARTITION BY RANGE (price);
+CREATE TABLE orders_1 PARTITION OF orders FOR VALUES FROM ('0') TO (300);
+CREATE TABLE orders_2 PARTITION OF orders FOR VALUES FROM ('300') TO ('600');
+CREATE TABLE orders_2 PARTITION OF orders FOR VALUES FROM ('600') TO ('999');
+CREATE TABLE orders_def PARTITION OF orders DEFAULT;
+````
+> - `PARTITION BY RANGE` с раширением `pg_partman` для автоматического создания новых таблиц  
+
+````SQL
+CREATE TABLE orders  (...) PARTITION BY RANGE (price);
+SELECT partman.create_parent('public.orders', 'price', 'partman', '300');
+...
+````
+ 
 
 
 ## Задача 4
