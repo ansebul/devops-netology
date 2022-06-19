@@ -1,0 +1,24 @@
+version: 3
+automerge: true
+delete_source_branch_on_merge: true
+parallel_plan: true
+parallel_apply: true
+projects:
+- dir: .
+  workspace: stage
+- dir: .
+  workspace: prod
+  autoplan:
+    when_modified: ["*.tf", "./**/*.tf"]
+    enabled: true
+  apply_requirements: [mergeable, approved]
+  workflow: testworkflow
+workflows:
+  testworkflow:
+    plan:
+      steps:
+      - init
+      - plan:
+    apply:
+      steps:
+      - apply
